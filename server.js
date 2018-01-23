@@ -23,6 +23,11 @@ router.get('/', function(req, res) {
 // register routes... routes prefixed /api
 app.use('/api', router);
 
+// default catch-all route that sends back a error message in JSON format.
+router.get('*', (req, res) => res.status(404).send({
+  message: 'Error - Not found'
+}));
+
 // start server
 app.listen(PORT);
 console.log('App running on port ' + PORT);

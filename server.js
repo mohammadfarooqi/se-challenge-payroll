@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const multer = require('multer');
+const helper = require('./app/helper');
 
 // directory for the uploads
 const UPLOAD_DIR = './uploads/';
@@ -11,7 +12,7 @@ const UPLOAD_DIR = './uploads/';
 const upload = multer({ dest: UPLOAD_DIR }).single('file');
 
 //allow cross origin requests
-app.use(function(req, res, next) { 
+app.use((req, res, next) => { 
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -25,18 +26,18 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 // routes for api
-var router = express.Router();
+const router = express.Router();
 
 // test route to make sure everything is working http://localhost:8080/api
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
   res.json({ message: 'Test Hello World Route!' });   
 });
 
 // file upload function route
-router.post('/upload', function (req, res, next) {
+router.post('/upload', (req, res, next) => {
   let path = '';
   upload(req, res, function (err) {
      if (err) {
@@ -46,6 +47,10 @@ router.post('/upload', function (req, res, next) {
      }
 
      path = req.file.path;
+
+     // delete file 
+     helper.deleteFile(path);
+
      return res.send('Upload Completed for ' + path); 
   });     
 });

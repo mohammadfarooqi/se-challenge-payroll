@@ -1,3 +1,5 @@
+require('dotenv').config({ silent: true });
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -39,19 +41,42 @@ router.get('/', (req, res) => {
 // file upload function route
 router.post('/upload', (req, res, next) => {
   let path = '';
-  upload(req, res, function (err) {
-     if (err) {
-       // An error occurred when uploading
-       console.log(err);
-       return res.status(422).send('an Error occured');
-     }
+  upload(req, res, async (err) => {
+    if (err) {
+      // An error occurred when uploading
+      console.log(err);
+      return res.status(422).json({ message: 'Error: Unable to upload file.' });
+    }
 
-     path = req.file.path;
+    path = req.file.path;
 
-     // delete file 
-     helper.deleteFile(path);
+    let csvJSON;
 
-     return res.send('Upload Completed for ' + path); 
+    try {
+      csvJSON = await helper.csvToJSON(path);
+    } catch (err) {
+      console.log('Error in CSVJSON func', JSON.stringify(err));
+    }
+
+    if (csvJSON.length > 0 && csvJSON[csvJSON.length - 1] && csvJSON[csvJSON.length - 1].date === 'report id' && csvJSON[csvJSON.length - 1]['hours worked']) {
+      try {
+        const result = await helper.checkReportIdExists(csvJSON[csvJSON.length - 1]['hours worked']);
+        // console.log(result);
+
+        if (result) {
+          return res.status(409).json({ message: 'Error: report id in uploaded CSV already exists.' });
+        }
+      } catch (err) {
+        console.log('Error in returning checkReportIdExists: ', JSON.stringify(err));
+      }
+    }
+
+
+    // delete file 
+    helper.deleteFile(path);
+
+    // return res.send('Upload Completed for ' + path); 
+    return res.json({ message: 'Upload Completed for ' + path, csvJSON });
   });     
 });
 
@@ -59,7 +84,7 @@ router.post('/upload', (req, res, next) => {
 app.use('/api', router);
 
 // default catch-all route that sends back a error message in JSON format.
-router.get('*', (req, res) => res.status(404).send({
+router.get('*', (req, res) => res.status(404).json({
   message: 'Error - Not found'
 }));
 

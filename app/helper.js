@@ -209,7 +209,7 @@ function groupByPayPeriod(data) {
     }
   });
 
-  console.log(periods_group_by_emp);
+  // console.log(periods_group_by_emp);
 
   return result_array;
 }

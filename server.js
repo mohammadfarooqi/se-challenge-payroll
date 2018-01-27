@@ -35,7 +35,26 @@ const router = express.Router();
 
 // test route to make sure everything is working http://localhost:8080/api
 router.get('/', (req, res) => {
-  res.json({ message: 'Test Hello World Route!' });   
+  return res.json({ message: 'Test Hello World Route!' });   
+});
+
+// get all employee timecards report
+router.get('/employeesReport', async (req, res) => {
+  let data;
+  let result;
+
+  try {
+    result = await helper.getAllEmployeeTimecardOrderByEmpIdDate();
+    // console.log(result);  
+  } catch (err) {
+    console.log('Error: /employeesReport route error', JSON.stringify(err));
+    return res.status(500).json({ message: 'Error getting data.'});
+  }
+
+  data = helper.calculateAmountPaid(result);
+  data = helper.groupByPayPeriod(data);
+
+  return res.json({ data });
 });
 
 // file upload function route

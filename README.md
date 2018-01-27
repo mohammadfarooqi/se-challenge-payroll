@@ -9,6 +9,10 @@
 - Run `npm start` to start the server on default port 3000. 
 - Once started, please start the Angular client side to this app by running `ng serve` in the root folder for that repo (seperate repo).
 
+### Proud of
+
+This certainlly was a challenging project and I extremly enjoyed completing it. A few hick ups I ran into were that I had not utilized a relational database in Node for quite some time, therefore getting that up and running - installing, configuring, figuring out syntax etc, was definitely worth while. In addition to that creating a report were grouping by date (semi-monthly) is something I had not done before and that also was a challenge for me. I also liked how I structured the api seperate and client seperate. Reason being, I am a true beleiver in that at any point I can redo my frontend with out any effect in backend and vise versa. I feel there are a lot more advantages of this approach than disadvantages. In addition to this, I did my best to seperate routes and boiler plate of server setup. Lastly, I am pretty excited and proud of what I have delivered.
+
 -----------------------------------------------------
 
 Applicants for the [Software

@@ -1,5 +1,16 @@
 # Wave Software Development Challenge
 
+### Requirements
+
+- Have PostGres install locally
+- Have .env file configured similar to .envsample with appropriate values
+- Run `npm install` to install dependencies from root folder of this app.
+- Run `npm run refresh-db-table` to create table in database called postgres (default). Note: please make sure to update username, password and other items if nessessary in the package.json file for the refresh-db-table script command.
+- Run `npm start` to start the server on default port 3000. 
+- Once started, please start the Angular client side to this app by running `ng serve` in the root folder for that repo (seperate repo).
+
+-----------------------------------------------------
+
 Applicants for the [Software
 developer](https://wave.bamboohr.co.uk/jobs/view.php?id=1) role at Wave must
 complete the following challenge, and submit a solution prior to the onsite
